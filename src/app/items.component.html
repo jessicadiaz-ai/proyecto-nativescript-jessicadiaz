@@ -1,0 +1,37 @@
+<ActionBar title="Listado y Búsqueda"></ActionBar>
+
+<StackLayout class="p-20">
+  <TextField
+    [(ngModel)]="searchText"
+    #searchModel="ngModel"
+    customMinLength="3"
+    hint="Buscar elemento..."
+    class="input">
+  </TextField>
+
+  <Label
+    *ngIf="searchModel.hasError('customMinLength') && searchModel.touched"
+    text="El texto debe tener al menos 3 caracteres"
+    class="text-danger">
+  </Label>
+
+  <PullToRefresh (refresh)="onRefresh($event)">
+    <ListView [items]="items" (itemTap)="goToDetail($event.item.id)">
+      <ng-template let-item="item">
+        <FlexboxLayout flexDirection="row" justifyContent="space-between" alignItems="center" class="p-10">
+
+          <StackLayout (doubleTap)="onDoubleTap(item)">
+            <Label [text]="item.title" class="font-weight-bold"></Label>
+            <Label [text]="'Categoría: ' + item.category" class="text-muted"></Label>
+          </StackLayout>
+
+          <FlexboxLayout flexDirection="row">
+            <Button text="Categoría" (tap)="openActionDialog(item)" class="btn btn-outline"></Button>
+            <Button text="repeat" (tap)="animateButton($event)" class=btn btn-primary"></Button>
+          </FlexboxLayout>
+
+        </FlexboxLayout>
+      </ng-template>
+    </ListView>
+  </PullToRefresh>
+</StackLayout>
